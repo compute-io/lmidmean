@@ -1,7 +1,7 @@
 {
   "name": "compute-lmidmean",
   "version": "0.0.0",
-  "description": "Compute module.",
+  "description": "Computes the interquartile mean (midmean) of the values below the median for a numeric array.",
   "author": {
     "name": "Rebekah Smith",
     "email": "rebekahjs17@gmail.com"
@@ -10,6 +10,10 @@
     {
       "name": "Rebekah Smith",
       "email": "rebekahjs17@gmail.com"
+    },
+    {
+      "name": "Athan Reines",
+      "email": "kgryte@gmail.com"
     }
   ],
   "scripts": {
@@ -25,7 +29,14 @@
   "keywords": [
     "compute.io",
     "compute",
-    "computation"
+    "computation",
+    "lower midmean",
+    "midmean",
+    "interquartile mean",
+    "stats",
+    "statistics",
+    "maths",
+    "mathematics"
   ],
   "bugs": {
     "url": "https://github.com/compute-io/lmidmean/issues"

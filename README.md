@@ -2,7 +2,7 @@ lmidmean
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> Compute module.
+> Computes the [lower interquartile mean](http://www.jstor.org/stable/1268431) (lower midmean) of a numeric array. This is equivalent to the values between the first and third quartiles for the set of values below the median of the data set.
 
 
 ## Installation
@@ -19,18 +19,40 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 To use the module,
 
 ``` javascript
-var foo = require( 'compute-lmidmean' );
+var lmidmean = require( 'compute-lmidmean' );
 ```
 
-#### foo( arr )
+#### lmidmean( arr[, sorted] )
 
-What does this function do?
+Computes the [lower midmean](http://www.jstor.org/stable/1268431) of a numeric `array`.
+
+``` javascript
+var unsorted = [ 5, 6, 7, 2, 1, 8, 4, 3 ];
+
+var mean = lmidmean( unsorted );
+// returns 2.5
+```
+
+If the input `array` is already `sorted` in __ascending__ order, set the optional second argument to `true`.
+
+``` javascript
+var sorted = [ 1, 2, 3, 4, 5, 6, 7, 8 ];
+
+var mean = lmidmean( sorted, true );
+// returns 2.5
+```
 
 
 ## Examples
 
 ``` javascript
-var foo = require( 'compute-lmidmean' );
+var data = new Array( 100 );
+
+for ( var i = 0; i < data.length; i++ ) {
+    data[ i ] = Math.round( Math.random()*100 );
+}
+
+console.log( lmidmean( data ) );
 ```
 
 To run the example code from the top-level application directory,
@@ -38,6 +60,16 @@ To run the example code from the top-level application directory,
 ``` bash
 $ node ./examples/index.js
 ```
+
+## Notes
+
+If provided an unsorted input `array`, the function is `O( N log(N) + m )`, where `N` is the input `array` length and `m` is the number of values located between the first and third quartiles of the lower range. If the input `array` is already sorted in __ascending__ order, the function is `O(m)`.
+
+The lower midmean includes the values located between *but not including* the first and third quartiles for the set of values below the median. In the following examples, the values included in the lmidmean are in bold.
+
+[1,__2,3__,4,5,6,7,8] —> lmidmean: 2.5
+
+[1,2,__3,4__,5,6,7,8,9,10,11,12] —> lmidmean: 3.5
 
 
 ## Tests
