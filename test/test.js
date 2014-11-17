@@ -72,13 +72,11 @@ describe( 'compute-lmidmean', function tests() {
 	it( 'should throw an error if provided an array of insufficient length', function test() {
 		var data = [ 2, 5, 7, 7, 1 ];
 
-		function badValue( array ) {
-			return function() {
-				lmidmean( array );
-			};
+		function foo() {
+			lmidmean( data );
 		}		
 
-		expect( badValue( data ) ).to.throw( TypeError );
+		expect( foo ).to.throw( Error );
 
 	});
 

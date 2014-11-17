@@ -1,8 +1,8 @@
-lmidmean
+Lower Midmean
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> Computes the [lower interquartile mean](http://www.jstor.org/stable/1268431) (lower midmean) of a numeric array. This is equivalent to the values between the first and third quartiles for the set of values below the median of the data set.
+> Computes the [lower interquartile mean](http://www.jstor.org/stable/1268431) (lower midmean) of a numeric array. 
 
 
 ## Installation
@@ -24,7 +24,9 @@ var lmidmean = require( 'compute-lmidmean' );
 
 #### lmidmean( arr[, sorted] )
 
-Computes the [lower midmean](http://www.jstor.org/stable/1268431) of a numeric `array`.
+Computes the [lower midmean](http://www.jstor.org/stable/1268431) for a numeric `array`. This is computed by discarding all values above the median and calculating the mean of those values falling between the first and third quartiles.
+
+Note: the input array must contain 6 or more elements.
 
 ``` javascript
 var unsorted = [ 5, 6, 7, 2, 1, 8, 4, 3 ];
@@ -41,7 +43,6 @@ var sorted = [ 1, 2, 3, 4, 5, 6, 7, 8 ];
 var mean = lmidmean( sorted, true );
 // returns 2.5
 ```
-
 
 ## Examples
 
@@ -67,9 +68,9 @@ If provided an unsorted input `array`, the function is `O( N log(N) + m )`, wher
 
 The lower midmean includes the values located between *but not including* the first and third quartiles for the set of values below the median. In the following examples, the values included in the lmidmean are in bold.
 
-[1,__2,3__,4,5,6,7,8] —> lmidmean: 2.5
+*	[1,__2,3__,4,5,6,7,8] —> lmidmean: 2.5
 
-[1,2,__3,4__,5,6,7,8,9,10,11,12] —> lmidmean: 3.5
+*	[1,2,__3,4__,5,6,7,8,9,10,11,12] —> lmidmean: 3.5
 
 
 ## Tests

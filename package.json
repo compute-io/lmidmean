@@ -1,7 +1,7 @@
 {
   "name": "compute-lmidmean",
   "version": "1.0.0",
-  "description": "Computes the interquartile mean (midmean) of the values below the median for a numeric array.",
+  "description": "Computes the lower interquartile mean (lower midmean) of a numeric array.",
   "author": {
     "name": "Rebekah Smith",
     "email": "rebekahjs17@gmail.com"
@@ -33,6 +33,9 @@
     "lower midmean",
     "midmean",
     "interquartile mean",
+    "iqr",
+    "quartiles",
+    "quantiles",
     "stats",
     "statistics",
     "maths",
