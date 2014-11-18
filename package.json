@@ -1,6 +1,6 @@
 {
   "name": "compute-lmidmean",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Computes the lower interquartile mean (lower midmean) of a numeric array.",
   "author": {
     "name": "Rebekah Smith",
