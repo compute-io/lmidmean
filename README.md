@@ -66,7 +66,7 @@ $ node ./examples/index.js
 
 If provided an unsorted input `array`, the function is `O( N log(N) + m )`, where `N` is the input `array` length and `m` is the number of values located between the first and third quartiles of the lower range. If the input `array` is already sorted in __ascending__ order, the function is `O(m)`.
 
-The lower midmean includes the values located between *but not including* the first and third quartiles for the set of values below the median. In the following examples, the values included in the lmidmean are in bold.
+The lower midmean includes the values located between *but not including* the first and third quartiles of the lower range. In the following examples, the values included in the lower midmean are in bold.
 
 *	[1,__2,3__,4,5,6,7,8] —> lmidmean: 2.5
 
