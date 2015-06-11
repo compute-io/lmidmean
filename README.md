@@ -2,7 +2,7 @@ Lower Midmean
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> Computes the [lower interquartile mean](http://www.jstor.org/stable/1268431) (lower midmean) of a numeric array.
+> Computes the [lower interquartile mean](http://www.jstor.org/stable/1268431) (lower midmean).
 
 
 ## Installation
@@ -37,6 +37,8 @@ mean = lmidmean( unsorted );
 // returns 2.5
 ```
 
+Note: the input array must contain 6 or more elements, otherwise the function returns `null`.
+
 If the input `array` is already `sorted` in __ascending__ order, set the `sorted` option to `true`.
 
 ``` javascript
@@ -47,8 +49,6 @@ var mean = lmidmean( sorted, {
 });
 // returns 2.5
 ```
-
-Note: the input array must contain 6 or more elements, otherwise the function returns `null`.
 
 For non-numeric `arrays`, provide an accessor `function` for accessing `array` values.
 
