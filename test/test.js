@@ -1,9 +1,13 @@
+/* global describe, it, require */
 'use strict';
 
 // MODULES //
 
 var // Expectation library:
 	chai = require( 'chai' ),
+
+	// Matrix data structure:
+	matrix = require( 'dstructs-matrix' ),
 
 	// Module to be tested:
 	lmidmean = require( './../lib' );
@@ -23,9 +27,9 @@ describe( 'compute-lmidmean', function tests() {
 		expect( lmidmean ).to.be.a( 'function' );
 	});
 
-	it( 'should throw an error if provided a non-array', function test() {
+	it( 'should throw an error if the first argument is neither array-like or matrix-like', function test() {
 		var values = [
-			'5',
+			// '5', // valid as is array-like (length)
 			5,
 			true,
 			undefined,
@@ -38,82 +42,145 @@ describe( 'compute-lmidmean', function tests() {
 		for ( var i = 0; i < values.length; i++ ) {
 			expect( badValue( values[i] ) ).to.throw( TypeError );
 		}
-
 		function badValue( value ) {
 			return function() {
-				lmidmean( value, true );
+				lmidmean( value );
 			};
 		}
 	});
 
-	it( 'should throw an error if provided a non-boolean for the second argument', function test() {
+	it( 'should throw an error if provided a dimension which is greater than 2 when provided a matrix', function test() {
 		var values = [
 			'5',
 			5,
-			[],
+			true,
 			undefined,
 			null,
 			NaN,
-			function(){},
-			{}
+			[],
+			{},
+			function(){}
 		];
 
 		for ( var i = 0; i < values.length; i++ ) {
-			expect( badValue( values[i] ) ).to.throw( TypeError );
+			expect( badValue( values[i] ) ).to.throw( Error );
 		}
-
 		function badValue( value ) {
 			return function() {
-				lmidmean( [], value );
+				lmidmean( matrix( [2,2] ), {
+					'dim': value
+				});
 			};
 		}
 	});
 
-	it( 'should throw an error if provided an array of insufficient length', function test() {
-		var data = [ 2, 5, 7, 7, 1 ];
+	it( 'should throw an error if provided an unrecognized/unsupported data type option', function test() {
+		var values = [
+			'beep',
+			'boop'
+		];
 
-		function foo() {
-			lmidmean( data );
-		}		
-
-		expect( foo ).to.throw( Error );
-
+		for ( var i = 0; i < values.length; i++ ) {
+			expect( badValue( values[i] ) ).to.throw( Error );
+		}
+		function badValue( value ) {
+			return function() {
+				lmidmean( matrix( [2,2] ), {
+					'dtype': value
+				});
+			};
+		}
 	});
 
-	it( 'should compute the lmidmean when the array length divides by 8', function test() {
+	it( 'should compute the lmidmean', function test() {
 		var data, expected;
 
-		data = [ 15, 9, 4, 12, 14, 8, 2, 5, 16, 1, 10, 3, 6, 7, 11, 13 ];
-		expected = 4.5;
+		data = [ 2, 4, 5, 3, 8, 2 ];
+		expected = 2;
 
-		// Unsorted test:
 		assert.strictEqual( lmidmean( data ), expected );
-
-		// Sort the data:
-		data.sort( function sort( a, b ) {
-			return a - b;
-		});
-
-		// Sorted test:
-		assert.strictEqual( lmidmean( data, true ), expected );
 	});
 
-	it( 'should compute the lmidmean when the array length does not divide by 8', function test() {
+	it( 'should compute the lmidmean of a typed array', function test() {
 		var data, expected;
 
-		data = [ 9, 4, 12, 8, 2, 5, 1, 10, 3, 6, 7, 11 ];
-		expected = 3.5;
+		data = new Int8Array( [ 2, 4, 5, 3, 8, 2 ] );
+		expected = 2;
 
-		// Unsorted test:
 		assert.strictEqual( lmidmean( data ), expected );
+	});
 
-		// Sort the data:
-		data.sort( function sort( a, b ) {
-			return a - b;
+	it( 'should compute the lmidmean using an accessor function', function test() {
+		var data, expected, actual;
+		data = [
+			{'x':2},
+			{'x':4},
+			{'x':5},
+			{'x':3},
+			{'x':8},
+			{'x':2}
+		];
+
+		expected = 2;
+		actual = lmidmean( data, {
+			'accessor': getValue
 		});
 
-		// Sorted test:
-		assert.strictEqual( lmidmean( data, true ), expected );
+		assert.strictEqual( actual, expected );
+
+		function getValue( d ) {
+			return d.x;
+		}
+	});
+
+	it( 'should compute the lmidmean along a matrix dimension', function test() {
+		var expected,
+			data,
+			mat,
+			mu,
+			i;
+
+		data = new Int8Array( 36 );
+		for ( i = 0; i < data.length; i++ ) {
+			data[ i ] = i;
+		}
+		mat = matrix( data, [6,6], 'int8' );
+
+		// Default:
+		mu = lmidmean( mat );
+		expected = '1;7;13;19;25;31';
+
+		assert.strictEqual( mu.toString(), expected, 'default' );
+
+		// Along columns:
+		mu = lmidmean( mat, {
+			'dim': 2
+		});
+		expected = '1;7;13;19;25;31';
+
+		assert.strictEqual( mu.toString(), expected, 'dim: 2' );
+
+		// Along rows:
+		mu = lmidmean( mat, {
+			'dim': 1
+		});
+		expected = '6,7,8,9,10,11';
+
+		assert.strictEqual( mu.toString(), expected, 'dim: 1' );
+	});
+
+	it( 'should compute the lmidmean of 1d matrices (vectors)', function test() {
+		var data, mat;
+
+		data = [ 2, 4, 5, 3, 8, 2 ];
+
+		// Row vector:
+		mat = matrix( data, [1,6], 'int8' );
+		assert.strictEqual( lmidmean( mat ), 2 );
+
+		// Column vector:
+		mat = matrix( data, [6,1], 'int8' );
+		assert.strictEqual( lmidmean( mat ), 2 );
 	});
 
 });
